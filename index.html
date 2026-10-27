@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="notranslate" translate="no">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KDP Royalty & Spine Width Calculator | Amazon KDP Tool</title>
-  <meta name="description" content="Calculate Amazon KDP printing cost, paperback royalty (60% and 40%), and spine width in seconds. Free tool for KDP publishers worldwide.">
-  <meta name="google" content="notranslate">
+  <meta name="description" content="Calculate Amazon KDP printing cost, paperback royalty (60% and 40%), and spine width in seconds. Free professional tool for self-publishers.">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,44 +12,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
-    /* Styling the Google Translate box cleanly */
-    .goog-te-gadget {
-      font-size: 13px !important;
-      color: #64748b !important;
-    }
-    .goog-te-combo {
-      padding: 5px 10px !important;
-      border-radius: 8px !important;
-      border: 1px solid #cbd5e1 !important;
-      outline: none !important;
-      background: white !important;
-      font-weight: 500 !important;
-      color: #1e293b !important;
-      font-size: 13px !important;
-    }
-    .goog-logo-link, .goog-te-banner-frame {
-      display: none !important;
-    }
-    body {
-      top: 0px !important;
-    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
   <!-- Header -->
   <header class="bg-white border-b border-slate-200 py-3.5 px-6 shadow-sm">
-    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-2">
         <span class="text-2xl">📚</span>
         <span class="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">KDP Calc Pro</span>
-        <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full ml-2">GLOBAL</span>
       </div>
       
-      <!-- Translate Dropdown: Default English -->
+      <!-- Custom Clean Language Dropdown -->
       <div class="flex items-center space-x-2">
-        <span class="text-xs text-slate-500 font-medium">🌐 Language:</span>
-        <div id="google_translate_element"></div>
+        <label for="langSelect" class="text-xs text-slate-500 font-medium hidden sm:inline">Language:</label>
+        <div class="relative">
+          <select id="langSelect" onchange="changeLanguage(this.value)" 
+            class="text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 px-3 pr-7 rounded-lg border border-slate-300 outline-none cursor-pointer appearance-none transition">
+            <option value="en">🇺🇸 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500 text-[10px]">
+            ▼
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -58,8 +49,8 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow">
     <div class="text-center my-6">
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">KDP Royalty & Spine Calculator</h1>
-      <p class="text-slate-600 text-sm sm:text-base mt-2">Accurately calculate your Amazon KDP printing costs, net royalties, and spine width instantly.</p>
+      <h1 id="txtTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">KDP Royalty & Spine Calculator</h1>
+      <p id="txtSubtitle" class="text-slate-600 text-sm sm:text-base mt-2">Accurately calculate your Amazon KDP printing costs, net royalties, and spine width instantly.</p>
     </div>
 
     <!-- Calculator Card -->
@@ -68,15 +59,15 @@
         
         <!-- Input 1: Page Count -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Page Count</label>
+          <label id="lblPageCount" class="block text-sm font-semibold text-slate-700 mb-1">Page Count</label>
           <input type="number" id="pageCount" value="80" min="24" max="800" step="1"
             class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition font-medium">
-          <p class="text-xs text-slate-500 mt-1">Minimum 24 pages (Paperback)</p>
+          <p id="subPageCount" class="text-xs text-slate-500 mt-1">Minimum 24 pages (Paperback)</p>
         </div>
 
         <!-- Input 2: Interior Type -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Interior Type</label>
+          <label id="lblInkType" class="block text-sm font-semibold text-slate-700 mb-1">Interior Type</label>
           <select id="inkType" 
             class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition font-medium bg-white">
             <option value="bw_white">Black & White (White Paper)</option>
@@ -84,18 +75,18 @@
             <option value="standard_color">Standard Color</option>
             <option value="premium_color">Premium Color</option>
           </select>
-          <p class="text-xs text-slate-500 mt-1">Standard for coloring & puzzle books</p>
+          <p id="subInkType" class="text-xs text-slate-500 mt-1">Standard for coloring & puzzle books</p>
         </div>
 
         <!-- Input 3: List Price -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">List Price ($ USD)</label>
+          <label id="lblListPrice" class="block text-sm font-semibold text-slate-700 mb-1">List Price ($ USD)</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 font-semibold">$</span>
             <input type="number" id="listPrice" value="7.99" min="3.50" max="250" step="0.01"
               class="w-full pl-8 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition font-medium">
           </div>
-          <p class="text-xs text-slate-500 mt-1">Recommended: $6.99 – $9.99</p>
+          <p id="subListPrice" class="text-xs text-slate-500 mt-1">Recommended: $6.99 – $9.99</p>
         </div>
 
       </div>
@@ -109,7 +100,7 @@
 
       <!-- Results Display -->
       <div class="mt-8 pt-8 border-t border-slate-100">
-        <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
+        <h3 id="txtResultsHeading" class="text-base font-bold text-slate-800 mb-4 flex items-center">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block mr-2"></span> Estimated Breakdown
         </h3>
 
@@ -117,28 +108,28 @@
           
           <!-- Card 1: Printing Cost -->
           <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
-            <p class="text-xs font-medium text-slate-500">Printing Cost</p>
+            <p id="lblPrintingCost" class="text-xs font-medium text-slate-500">Printing Cost</p>
             <p id="resPrintingCost" class="text-2xl font-bold text-slate-900 mt-1">$2.30</p>
-            <p class="text-[11px] text-slate-400 mt-1">Per copy cost</p>
+            <p id="subPrintingCost" class="text-[11px] text-slate-400 mt-1">Per copy cost</p>
           </div>
 
           <!-- Card 2: 60% Amazon.com Royalty -->
           <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-            <p class="text-xs font-semibold text-emerald-700">Amazon.com Royalty (60%)</p>
+            <p id="lblRoyalty60" class="text-xs font-semibold text-emerald-700">Amazon.com Royalty (60%)</p>
             <p id="resRoyalty60" class="text-2xl font-extrabold text-emerald-700 mt-1">$2.49</p>
-            <p class="text-[11px] text-emerald-600 mt-1 font-medium">Per sale profit</p>
+            <p id="subRoyalty60" class="text-[11px] text-emerald-600 mt-1 font-medium">Per sale profit</p>
           </div>
 
           <!-- Card 3: 40% Expanded Distribution -->
           <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
-            <p class="text-xs font-medium text-slate-500">Expanded Dist. (40%)</p>
+            <p id="lblRoyalty40" class="text-xs font-medium text-slate-500">Expanded Dist. (40%)</p>
             <p id="resRoyalty40" class="text-2xl font-bold text-slate-800 mt-1">$0.90</p>
-            <p class="text-[11px] text-slate-400 mt-1">External retail profit</p>
+            <p id="subRoyalty40" class="text-[11px] text-slate-400 mt-1">External retail profit</p>
           </div>
 
           <!-- Card 4: Spine Width -->
           <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
-            <p class="text-xs font-semibold text-amber-800">Spine Width</p>
+            <p id="lblSpine" class="text-xs font-semibold text-amber-800">Spine Width</p>
             <p id="resSpine" class="text-2xl font-bold text-amber-900 mt-1">0.180 in</p>
             <p id="resSpineMm" class="text-[11px] text-amber-700 mt-1 font-medium">4.58 mm (Template)</p>
           </div>
@@ -147,7 +138,7 @@
 
         <!-- Formula Note -->
         <div class="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex flex-col sm:flex-row justify-between gap-2">
-          <span><strong>Formula:</strong> Royalty = (List Price × 60%) − Printing Cost</span>
+          <span id="txtFormula"><strong>Formula:</strong> Royalty = (List Price × 60%) − Printing Cost</span>
           <span id="minPriceNote" class="text-amber-700 font-semibold">Minimum Breakeven Price: $3.84</span>
         </div>
 
@@ -156,8 +147,8 @@
 
     <!-- SEO & FAQ Section -->
     <div class="mt-10 bg-white rounded-2xl p-6 border border-slate-200">
-      <h2 class="text-lg font-bold text-slate-900 mb-3">How Amazon KDP Royalties Work</h2>
-      <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+      <h2 id="faqTitle" class="text-lg font-bold text-slate-900 mb-3">How Amazon KDP Royalties Work</h2>
+      <ul id="faqList" class="space-y-2 text-sm text-slate-600 list-disc list-inside">
         <li><strong>Fixed Cost:</strong> KDP charges a fixed print cost ($1.00 for standard B&W paperbacks on Amazon.com).</li>
         <li><strong>Per Page Cost:</strong> Additional per-page fee ($0.01625/page) is added for paperbacks over standard base counts.</li>
         <li><strong>Spine Thickness:</strong> Books under 100-130 pages typically cannot accommodate spine text in Canva/KDP templates due to trim safety.</li>
@@ -167,12 +158,236 @@
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-    <p>© 2026 KDP Calc Pro. Independent tool for self-publishers worldwide. Not affiliated with Amazon.</p>
+    <p id="txtFooter">© 2026 KDP Calc Pro. Independent tool for self-publishers. Not affiliated with Amazon.</p>
   </footer>
 
-  <!-- Script for Calculations -->
+  <!-- Clean Built-in Multi-Language Engine -->
   <script>
+    const langData = {
+      en: {
+        title: "KDP Royalty & Spine Calculator",
+        subtitle: "Accurately calculate your Amazon KDP printing costs, net royalties, and spine width instantly.",
+        pageCount: "Page Count",
+        subPageCount: "Minimum 24 pages (Paperback)",
+        inkType: "Interior Type",
+        subInkType: "Standard for coloring & puzzle books",
+        listPrice: "List Price ($ USD)",
+        subListPrice: "Recommended: $6.99 – $9.99",
+        calcBtn: "Calculate Earnings",
+        resultsHeading: "Estimated Breakdown",
+        printingCost: "Printing Cost",
+        subPrintingCost: "Per copy cost",
+        royalty60: "Amazon.com Royalty (60%)",
+        subRoyalty60: "Per sale profit",
+        royalty40: "Expanded Dist. (40%)",
+        subRoyalty40: "External retail profit",
+        spine: "Spine Width",
+        spineUnit: "mm (Template)",
+        formula: "<strong>Formula:</strong> Royalty = (List Price × 60%) − Printing Cost",
+        minPrice: "Minimum Breakeven Price: $",
+        faqTitle: "How Amazon KDP Royalties Work",
+        faq1: "<strong>Fixed Cost:</strong> KDP charges a fixed print cost ($1.00 for standard B&W paperbacks on Amazon.com).",
+        faq2: "<strong>Per Page Cost:</strong> Additional per-page fee ($0.01625/page) is added for paperbacks over standard base counts.",
+        faq3: "<strong>Spine Thickness:</strong> Books under 100-130 pages typically cannot accommodate spine text in Canva/KDP templates.",
+        footer: "© 2026 KDP Calc Pro. Independent tool for self-publishers. Not affiliated with Amazon."
+      },
+      de: {
+        title: "KDP Tantiemen- & Buchrücken-Rechner",
+        subtitle: "Berechnen Sie Amazon KDP Druckkosten, Netto-Tantiemen und Buchrückenbreite sofort.",
+        pageCount: "Seitenzahl",
+        subPageCount: "Mindestens 24 Seiten (Taschenbuch)",
+        inkType: "Drucktyp",
+        subInkType: "Standard für Mal- und Rätselbücher",
+        listPrice: "Listenpreis ($ USD)",
+        subListPrice: "Empfohlen: $6.99 – $9.99",
+        calcBtn: "Einnahmen berechnen",
+        resultsHeading: "Geschätzte Übersicht",
+        printingCost: "Druckkosten",
+        subPrintingCost: "Kosten pro Exemplar",
+        royalty60: "Amazon Tantieme (60%)",
+        subRoyalty60: "Gewinn pro Verkauf",
+        royalty40: "Erweiterter Vertrieb (40%)",
+        subRoyalty40: "Gewinn über Buchhandel",
+        spine: "Buchrückenbreite",
+        spineUnit: "mm (Vorlage)",
+        formula: "<strong>Formel:</strong> Tantieme = (Listenpreis × 60%) − Druckkosten",
+        minPrice: "Mindestpreis für Gewinn: $",
+        faqTitle: "Wie Amazon KDP Tantiemen funktionieren",
+        faq1: "<strong>Fixkosten:</strong> KDP berechnet feste Druckkosten ($1.00 für B&W Taschenbücher).",
+        faq2: "<strong>Seitenkosten:</strong> Zusätzliche Gebühr von ca. $0.01625 pro Seite.",
+        faq3: "<strong>Buchrücken:</strong> Bücher unter 100 Seiten bieten meist keinen Platz für Text auf dem Buchrücken.",
+        footer: "© 2026 KDP Calc Pro. Unabhängiges Autoren-Tool. Nicht mit Amazon verbunden."
+      },
+      es: {
+        title: "Calculadora de Regalías y Lomo KDP",
+        subtitle: "Calcula con precisión los costes de impresión de Amazon KDP, regalías netas y el lomo al instante.",
+        pageCount: "Número de Páginas",
+        subPageCount: "Mínimo 24 páginas (Tapa blanda)",
+        inkType: "Tipo de Interior",
+        subInkType: "Estándar para libros de colorear y pasatiempos",
+        listPrice: "Precio de Venta ($ USD)",
+        subListPrice: "Recomendado: $6.99 – $9.99",
+        calcBtn: "Calcular Ganancias",
+        resultsHeading: "Desglose Estimado",
+        printingCost: "Coste de Impresión",
+        subPrintingCost: "Coste por copia",
+        royalty60: "Regalía Amazon.com (60%)",
+        subRoyalty60: "Beneficio por venta",
+        royalty40: "Distribución Ampliada (40%)",
+        subRoyalty40: "Beneficio en librerías externas",
+        spine: "Grosor del Lomo",
+        spineUnit: "mm (Plantilla)",
+        formula: "<strong>Fórmula:</strong> Regalía = (Precio × 60%) − Coste de Impresión",
+        minPrice: "Precio mínimo sin pérdidas: $",
+        faqTitle: "Cómo funcionan las regalías de Amazon KDP",
+        faq1: "<strong>Coste Fijo:</strong> KDP cobra un coste de impresión fijo ($1.00 en B&N).",
+        faq2: "<strong>Coste por Página:</strong> Se añade una tarifa por página ($0.01625/página).",
+        faq3: "<strong>Grosor del Lomo:</strong> Libros con menos de 100 páginas no suelen admitir texto en el lomo.",
+        footer: "© 2026 KDP Calc Pro. Herramienta independiente para autores. No afiliada con Amazon."
+      },
+      fr: {
+        title: "Calculateur de Redevances & Dos KDP",
+        subtitle: "Calculez précisément vos coûts d'impression Amazon KDP, redevances et largeur de dos instantanément.",
+        pageCount: "Nombre de Pages",
+        subPageCount: "Minimum 24 pages (Broché)",
+        inkType: "Type d'Intérieur",
+        subInkType: "Standard pour livres de coloriage",
+        listPrice: "Prix Catalogue ($ USD)",
+        subListPrice: "Recommandé : $6.99 – $9.99",
+        calcBtn: "Calculer les Revenus",
+        resultsHeading: "Estimation Détaillée",
+        printingCost: "Coût d'Impression",
+        subPrintingCost: "Coût par exemplaire",
+        royalty60: "Redevance Amazon (60%)",
+        subRoyalty60: "Bénéfice par vente",
+        royalty40: "Distribution Élargie (40%)",
+        subRoyalty40: "Bénéfice libraires tiers",
+        spine: "Largeur du Dos",
+        spineUnit: "mm (Modèle)",
+        formula: "<strong>Formule :</strong> Redevance = (Prix × 60%) − Coût d'Impression",
+        minPrice: "Prix minimum d'équilibre : $",
+        faqTitle: "Fonctionnement des redevances Amazon KDP",
+        faq1: "<strong>Coût Fixe :</strong> KDP facture un coût fixe ($1.00 pour broché N&B).",
+        faq2: "<strong>Coût par Page :</strong> Frais additionnels de $0.01625 par page.",
+        faq3: "<strong>Tranche :</strong> Moins de 100 pages ne permettent pas d'inscrire de titre sur le dos.",
+        footer: "© 2026 KDP Calc Pro. Outil indépendant pour auto-éditeurs. Non affilié à Amazon."
+      },
+      it: {
+        title: "Calcolatore Royalty e Dorso KDP",
+        subtitle: "Calcola con precisione costi di stampa Amazon KDP, guadagni netti e spessore del dorso.",
+        pageCount: "Numero di Pagine",
+        subPageCount: "Minimo 24 pagine",
+        inkType: "Tipo di Interno",
+        subInkType: "Ideale per libri da colorare",
+        listPrice: "Prezzo di Listino ($ USD)",
+        subListPrice: "Consigliato: $6.99 – $9.99",
+        calcBtn: "Calcola Guadagni",
+        resultsHeading: "Dettaglio Stimato",
+        printingCost: "Costo di Stampa",
+        subPrintingCost: "Costo per copia",
+        royalty60: "Royalty Amazon (60%)",
+        subRoyalty60: "Profitto per vendita",
+        royalty40: "Distribuzione Estesa (40%)",
+        subRoyalty40: "Profitto librerie esterne",
+        spine: "Larghezza Dorso",
+        spineUnit: "mm (Modello)",
+        formula: "<strong>Formula:</strong> Royalty = (Prezzo × 60%) − Costo di Stampa",
+        minPrice: "Prezzo minimo di pareggio: $",
+        faqTitle: "Come funzionano le royalty di Amazon KDP",
+        faq1: "<strong>Costo Fisso:</strong> Spesa fissa di stampa ($1.00 per libri B&N).",
+        faq2: "<strong>Costo per Pagina:</strong> Quota aggiuntiva di $0.01625 a pagina.",
+        faq3: "<strong>Dorso:</strong> Con meno di 100 pagine non è consigliato inserire testo sul dorso.",
+        footer: "© 2026 KDP Calc Pro. Strumento indipendente per autori indipendenti."
+      },
+      pt: {
+        title: "Calculadora de Royalties e Lombada KDP",
+        subtitle: "Calcule custos de impressão, royalties líquidos e espessura da lombada no Amazon KDP.",
+        pageCount: "Número de Páginas",
+        subPageCount: "Mínimo 24 páginas",
+        inkType: "Tipo de Miolo",
+        subInkType: "Padrão para livros de colorir",
+        listPrice: "Preço de Capa ($ USD)",
+        subListPrice: "Recomendado: $6.99 – $9.99",
+        calcBtn: "Calcular Ganhos",
+        resultsHeading: "Detalhamento Estimado",
+        printingCost: "Custo de Impressão",
+        subPrintingCost: "Custo por exemplar",
+        royalty60: "Royalty Amazon (60%)",
+        subRoyalty60: "Lucro por venda",
+        royalty40: "Distribuição Estendida (40%)",
+        subRoyalty40: "Lucro em lojas externas",
+        spine: "Largura da Lombada",
+        spineUnit: "mm (Gabarito)",
+        formula: "<strong>Fórmula:</strong> Royalty = (Preço × 60%) − Custo de Impressão",
+        minPrice: "Preço mínimo de equilíbrio: $",
+        faqTitle: "Como funcionam os royalties do Amazon KDP",
+        faq1: "<strong>Custo Fixo:</strong> KDP cobra uma taxa fixa ($1.00 para livros P&B).",
+        faq2: "<strong>Custo por Página:</strong> Taxa de $0.01625 por página.",
+        faq3: "<strong>Lombada:</strong> Livros com menos de 100 páginas não comportam texto na lombada.",
+        footer: "© 2026 KDP Calc Pro. Ferramenta independente para autores."
+      },
+      hi: {
+        title: "KDP रॉयल्टी व स्पाइन कैलकुलेटर",
+        subtitle: "अपनी किताब की सटीक प्रिंटिंग लागत, रॉयल्टी और रीढ़ की चौड़ाई (Spine Width) तुरंत जानें।",
+        pageCount: "पेजों की संख्या (Page Count)",
+        subPageCount: "न्यूनतम 24 पेज (Paperback)",
+        inkType: "इंटीरियर प्रकार (Interior Type)",
+        subInkType: "कलरिंग और पज़ल बुक्स के लिए B&W चुनें",
+        listPrice: "बिक्री मूल्य (List Price $ USD)",
+        subListPrice: "अनुशंसित: $6.99 – $9.99",
+        calcBtn: "कैलकुलेट करें (Calculate Now)",
+        resultsHeading: "रिज़ल्ट और ब्रेकडाउन",
+        printingCost: "प्रिंटिंग लागत (Amazon Cut)",
+        subPrintingCost: "प्रति कॉपी लागत",
+        royalty60: "Amazon.com रॉयल्टी (60%)",
+        subRoyalty60: "प्रति बिक्री शुद्ध मुनाफा",
+        royalty40: "Expanded Dist. (40%)",
+        subRoyalty40: "बाहरी बुकस्टोर्स के लिए",
+        spine: "रीढ़ की चौड़ाई (Spine Width)",
+        spineUnit: "mm (Canva स्पाइन)",
+        formula: "<strong>सूत्र (Formula):</strong> रॉयल्टी = (कीमत × 60%) − प्रिंटिंग लागत",
+        minPrice: "न्यूनतम अनुशंसित कीमत: $",
+        faqTitle: "Amazon KDP रॉयल्टी की गणना कैसे होती है?",
+        faq1: "<strong>Fixed Cost:</strong> ब्लैक एंड व्हाइट पेपरबैक के लिए अमेज़न $1.00 फिक्स चार्ज लेता है।",
+        faq2: "<strong>Per Page Cost:</strong> इसके अलावा प्रति पेज $0.01625 प्रिंटिंग लागत जुड़ती है।",
+        faq3: "<strong>कवर की मोटाई (Spine):</strong> 100 पेजों से कम की किताब की रीढ़ पर टेक्स्ट न लिखें।",
+        footer: "© 2026 KDP Calc Pro. स्वतंत्र पब्लिशर टूल। अमेज़न से संबद्ध नहीं।"
+      }
+    };
+
+    let currentLanguage = 'en';
+
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      const d = langData[lang] || langData['en'];
+
+      document.getElementById('txtTitle').innerText = d.title;
+      document.getElementById('txtSubtitle').innerText = d.subtitle;
+      document.getElementById('lblPageCount').innerText = d.pageCount;
+      document.getElementById('subPageCount').innerText = d.subPageCount;
+      document.getElementById('lblInkType').innerText = d.inkType;
+      document.getElementById('subInkType').innerText = d.subInkType;
+      document.getElementById('lblListPrice').innerText = d.listPrice;
+      document.getElementById('subListPrice').innerText = d.subListPrice;
+      document.getElementById('calcBtn').innerText = d.calcBtn;
+      document.getElementById('txtResultsHeading').innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block mr-2"></span> ${d.resultsHeading}`;
+      document.getElementById('lblPrintingCost').innerText = d.printingCost;
+      document.getElementById('subPrintingCost').innerText = d.subPrintingCost;
+      document.getElementById('lblRoyalty60').innerText = d.royalty60;
+      document.getElementById('subRoyalty60').innerText = d.subRoyalty60;
+      document.getElementById('lblRoyalty40').innerText = d.royalty40;
+      document.getElementById('subRoyalty40').innerText = d.subRoyalty40;
+      document.getElementById('lblSpine').innerText = d.spine;
+      document.getElementById('txtFormula').innerHTML = d.formula;
+      document.getElementById('faqTitle').innerText = d.faqTitle;
+      document.getElementById('faqList').innerHTML = `<li>${d.faq1}</li><li>${d.faq2}</li><li>${d.faq3}</li>`;
+      document.getElementById('txtFooter').innerText = d.footer;
+
+      calculate();
+    }
+
     function calculate() {
+      const d = langData[currentLanguage] || langData['en'];
       const pageCount = parseInt(document.getElementById('pageCount').value) || 0;
       const inkType = document.getElementById('inkType').value;
       const listPrice = parseFloat(document.getElementById('listPrice').value) || 0;
@@ -213,8 +428,8 @@
       document.getElementById('resRoyalty60').innerText = `$${royalty60.toFixed(2)}`;
       document.getElementById('resRoyalty40').innerText = `$${royalty40.toFixed(2)}`;
       document.getElementById('resSpine').innerText = `${spineInches.toFixed(3)} in`;
-      document.getElementById('resSpineMm').innerText = `${spineMm.toFixed(2)} mm (Template)`;
-      document.getElementById('minPriceNote').innerText = `Minimum Breakeven Price: $${minPrice}`;
+      document.getElementById('resSpineMm').innerText = `${spineMm.toFixed(2)} ${d.spineUnit}`;
+      document.getElementById('minPriceNote').innerText = `${d.minPrice}${minPrice}`;
     }
 
     document.getElementById('calcBtn').addEventListener('click', calculate);
@@ -224,19 +439,5 @@
 
     calculate();
   </script>
-
-  <!-- Google Translate Setup: Forced Default English -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,hi,es,de,fr,it,ja,pt,ru,zh-CN,ar',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 </body>
 </html>
